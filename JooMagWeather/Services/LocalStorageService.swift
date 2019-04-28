@@ -20,44 +20,10 @@ class LocalStorageService: NSObject {
     var delegateList = [LocalStorageServiceDelegate]()
     var persistentContainer: NSPersistentContainer
     var workingContext: NSManagedObjectContext
+    var privateManagedObjectContext: NSManagedObjectContext
     var fetchResultController: NSFetchedResultsController<LocationInfo>
     
-    func addNewFavouriteLocation(cellModel: SearchCellModel) {
-        let newModel = LocationInfo(context: workingContext)
-        newModel.name = cellModel.name
-        newModel.temperature = cellModel.temperature
-        newModel.conditionText = cellModel.conditionText
-        newModel.conditionIcon = cellModel.conditionIcon
-        newModel.windSpeed = cellModel.windSpeed
-        newModel.windDirection = cellModel.windDirection
-        newModel.idx = Int16(currentItems().count)
-        newModel.query = cellModel.query
-
-        try? workingContext.save()
-    }
     
-    func removeFavouriteLocations(locations: [LocationInfo]) {
-        for location in locations {
-            workingContext.delete(location)
-        }
-        try? workingContext.save()
-    }
-    
-    func removeFavouriteLocations(cellModels: [SearchCellModel]) {
-        for currentModel in cellModels {
-            if let strongLocation = currentModel.storedLocation {
-                workingContext.delete(strongLocation)
-            }
-        }
-        try? workingContext.save()
-    }
-    
-    func rearrangeWithFollowingOrder(cellModels: [SearchCellModel]) {
-        for cellModel in cellModels.enumerated() {
-            cellModel.element.storedLocation?.setValue(Int16(cellModels.count - 1 - cellModel.offset), forKey: "idx")
-        }
-        try? workingContext.save()
-    }
     
     override init() {
         persistentContainer = NSPersistentContainer(name: "JooMagWeather")
@@ -67,11 +33,16 @@ class LocalStorageService: NSObject {
             }
         })
         workingContext = persistentContainer.viewContext
+        
+        privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        
+        // Configure Managed Object Context
+        privateManagedObjectContext .persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
         let request = NSFetchRequest<LocationInfo>(entityName: "LocationInfo")
         request.sortDescriptors = [NSSortDescriptor(key: "idx", ascending: false)]
         request.returnsObjectsAsFaults = false
         fetchResultController = NSFetchedResultsController<LocationInfo>(fetchRequest: request,
-                                                                         managedObjectContext: workingContext,
+                                                                         managedObjectContext: privateManagedObjectContext,
                                                                          sectionNameKeyPath: nil,
                                                                          cacheName: nil)
         
@@ -79,6 +50,43 @@ class LocalStorageService: NSObject {
         super.init()
         fetchResultController.delegate = self
         try? fetchResultController.performFetch()
+    }
+    
+    func addNewFavouriteLocation(cellModel: SearchCellModel) {
+        let newModel = LocationInfo(context: privateManagedObjectContext)
+        newModel.name = cellModel.name
+        newModel.temperature = cellModel.temperature
+        newModel.conditionText = cellModel.conditionText
+        newModel.conditionIcon = cellModel.conditionIcon
+        newModel.windSpeed = cellModel.windSpeed
+        newModel.windDirection = cellModel.windDirection
+        newModel.idx = Int16(currentItems().count)
+        newModel.query = cellModel.query
+
+        try? privateManagedObjectContext.save()
+    }
+    
+    func removeFavouriteLocations(locations: [LocationInfo]) {
+        for location in locations {
+            privateManagedObjectContext.delete(location)
+        }
+        try? privateManagedObjectContext.save()
+    }
+    
+    func removeFavouriteLocations(cellModels: [SearchCellModel]) {
+        for currentModel in cellModels {
+            if let strongLocation = currentModel.storedLocation {
+                privateManagedObjectContext.delete(strongLocation)
+            }
+        }
+        try? privateManagedObjectContext.save()
+    }
+    
+    func rearrangeWithFollowingOrder(cellModels: [SearchCellModel]) {
+        for cellModel in cellModels.enumerated() {
+            cellModel.element.storedLocation?.setValue(Int16(cellModels.count - 1 - cellModel.offset), forKey: "idx")
+        }
+        try? privateManagedObjectContext.save()
     }
     
     func currentItems() -> [LocationInfo] {
@@ -112,7 +120,7 @@ class LocalStorageService: NSObject {
                 oldItem.setValue(newItem.windDirection, forKey: "windDirection")
             }
         }
-        try? workingContext.save()
+        try? privateManagedObjectContext.save()
         
     }
 
