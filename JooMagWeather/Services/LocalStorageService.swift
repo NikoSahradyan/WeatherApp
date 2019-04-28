@@ -23,6 +23,11 @@ class LocalStorageService: NSObject {
     var fetchResultController: NSFetchedResultsController<LocationInfo>
     
     func addNewFavouriteLocation(cellModel: SearchCellModel) {
+        let currentNames = self.currentItems().map{ $0.name }
+        guard !currentNames.contains(cellModel.name) else {
+            return
+        }
+        
         let newModel = LocationInfo(context: workingContext)
         newModel.name = cellModel.name
         newModel.temperature = cellModel.temperature

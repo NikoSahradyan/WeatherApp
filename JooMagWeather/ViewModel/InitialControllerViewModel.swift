@@ -29,6 +29,7 @@ extension TableViewModel {
         if cellModel == SearchCellModel.empty {
             cell.locationNameLabel.text = cellModel.name
             cell.windInfoStack.isHidden = true
+            cell.temperatureLabel.text = nil
         } else {
             cell.temperatureLabel.text = String(cellModel.temperature)
             cell.locationNameLabel.text = cellModel.name
