@@ -14,11 +14,13 @@ class SearchCell: UITableViewCell {
         super.awakeFromNib()
     }
 
+    @IBOutlet weak var weatherInfoStack: UIStackView!
     @IBOutlet weak var windInfoStack: UIStackView!
     @IBOutlet weak var windDirection: UILabel!
     @IBOutlet weak var windSpeed: UILabel!
     @IBOutlet weak var icon: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
+    @IBOutlet weak var conditionText: UILabel!
     @IBOutlet weak var locationNameLabel: UILabel!
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -26,9 +28,9 @@ class SearchCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
+        weatherInfoStack.isHidden = false
         windInfoStack.isHidden = false
         icon.image = nil
-        temperatureLabel.text = nil
         locationNameLabel.text = nil
     }
     

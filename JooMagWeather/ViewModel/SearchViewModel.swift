@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class SearchViewModel: NSObject, TableViewModel {
+class SearchViewModel: NSObject, TableViewModelProtocol {
     var receivedResult = [SearchCellModel]()
     var reloadTable: () -> Void
     var closeSearch: () -> Void
@@ -41,14 +41,14 @@ class SearchViewModel: NSObject, TableViewModel {
         }
     }
     
-    func setupTextField(textFiled: UITextField) {
-        textFiled.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-    }
-    
     func setupTableView(tableView: UITableView) {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "SearchCell", bundle: nil), forCellReuseIdentifier: "SearchCell")
+    }
+    //text field update detetction
+    func setupTextField(textFiled: UITextField) {
+        textFiled.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -57,6 +57,7 @@ class SearchViewModel: NSObject, TableViewModel {
 }
 
 extension SearchViewModel: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return receivedResult.count
     }
@@ -70,14 +71,11 @@ extension SearchViewModel: UITableViewDataSource {
         
         return self.configCell(cell: cell, cellModel: cellModel)
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return self.cellHeight()
-    }
 }
 
 
 extension SearchViewModel: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard receivedResult.count > indexPath.row,
             receivedResult[indexPath.row] != SearchCellModel.empty else {
@@ -86,5 +84,9 @@ extension SearchViewModel: UITableViewDelegate {
         LocalStorageService.shared.addNewFavouriteLocation(cellModel: receivedResult[indexPath.row])
         
         closeSearch()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return self.cellHeight()
     }
 }

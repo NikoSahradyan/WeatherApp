@@ -25,20 +25,31 @@
                             <constraint firstAttribute="height" constant="44" id="otr-PC-wEg"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ruz-dg-D93">
-                        <rect key="frame" x="60" y="26" width="42" height="20.5"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gow-r4-Pn3">
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="v4e-UK-hnL">
+                        <rect key="frame" x="60" y="17.5" width="42" height="38"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ruz-dg-D93">
+                                <rect key="frame" x="0.0" y="0.0" width="42" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OCL-3d-iYR">
+                                <rect key="frame" x="0.0" y="23.5" width="31" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="255" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gow-r4-Pn3">
                         <rect key="frame" x="114" y="26" width="42" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <stackView opaque="NO" contentMode="scaleToFill" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="Tft-cg-ycb">
-                        <rect key="frame" x="173.5" y="21" width="109.5" height="31"/>
+                        <rect key="frame" x="213.5" y="21" width="109.5" height="31"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="QTc-Cy-AW6">
                                 <rect key="frame" x="0.0" y="0.0" width="83.5" height="31"/>
@@ -79,26 +90,28 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="suc-2g-8l0" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="29c-jq-mgM"/>
-                    <constraint firstItem="Ruz-dg-D93" firstAttribute="leading" secondItem="suc-2g-8l0" secondAttribute="trailing" constant="8" id="Ao6-sQ-6kV"/>
+                    <constraint firstItem="gow-r4-Pn3" firstAttribute="leading" secondItem="v4e-UK-hnL" secondAttribute="trailing" constant="12" id="BFg-24-0VI"/>
                     <constraint firstItem="suc-2g-8l0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="LPc-uj-zUK"/>
                     <constraint firstItem="gow-r4-Pn3" firstAttribute="centerY" secondItem="suc-2g-8l0" secondAttribute="centerY" id="Nmv-3N-AkE"/>
-                    <constraint firstItem="Ruz-dg-D93" firstAttribute="centerY" secondItem="suc-2g-8l0" secondAttribute="centerY" id="Rzl-9I-4Am"/>
+                    <constraint firstItem="v4e-UK-hnL" firstAttribute="leading" secondItem="suc-2g-8l0" secondAttribute="trailing" constant="8" id="UI7-r3-N29"/>
                     <constraint firstItem="Tft-cg-ycb" firstAttribute="centerY" secondItem="gow-r4-Pn3" secondAttribute="centerY" id="VFf-sE-lKP"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Tft-cg-ycb" secondAttribute="trailing" constant="8" id="ZvF-eF-ieF"/>
                     <constraint firstItem="Tft-cg-ycb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gow-r4-Pn3" secondAttribute="trailing" constant="8" id="boQ-FZ-IGv"/>
-                    <constraint firstItem="gow-r4-Pn3" firstAttribute="leading" secondItem="Ruz-dg-D93" secondAttribute="trailing" constant="12" id="fFw-0f-QgM"/>
+                    <constraint firstItem="v4e-UK-hnL" firstAttribute="centerY" secondItem="suc-2g-8l0" secondAttribute="centerY" id="cag-by-K3e"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="conditionText" destination="OCL-3d-iYR" id="aLw-zi-tsn"/>
                 <outlet property="icon" destination="suc-2g-8l0" id="X3Y-Fx-wVC"/>
                 <outlet property="locationNameLabel" destination="gow-r4-Pn3" id="zbD-kw-LFM"/>
                 <outlet property="temperatureLabel" destination="Ruz-dg-D93" id="Npg-V7-TwP"/>
+                <outlet property="weatherInfoStack" destination="v4e-UK-hnL" id="fyB-uc-2XI"/>
                 <outlet property="windDirection" destination="CN1-31-hn9" id="rVl-R2-olS"/>
                 <outlet property="windInfoStack" destination="Tft-cg-ycb" id="yfZ-sO-bjc"/>
                 <outlet property="windSpeed" destination="CSM-yF-nsk" id="07h-J1-re5"/>
             </connections>
-            <point key="canvasLocation" x="42.399999999999999" y="61.619190404797607"/>
+            <point key="canvasLocation" x="-111" y="65"/>
         </tableViewCell>
     </objects>
 </document>

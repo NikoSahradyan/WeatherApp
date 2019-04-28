@@ -7,41 +7,8 @@
 //
 
 import UIKit
-import CoreData
 
-protocol TableViewModel {
-    func cellHeight() -> CGFloat
-    func configCell(cell: SearchCell, cellModel: SearchCellModel) -> SearchCell
-}
-
-extension TableViewModel {
-
-    func cellHeight() -> CGFloat {
-        switch UIDevice.current.userInterfaceIdiom {
-        case .phone:
-            return 100
-        case .pad, .tv, .carPlay, .unspecified:
-            return 150
-        }
-    }
-    
-    func configCell(cell: SearchCell, cellModel: SearchCellModel) -> SearchCell {
-        if cellModel == SearchCellModel.empty {
-            cell.locationNameLabel.text = cellModel.name
-            cell.windInfoStack.isHidden = true
-            cell.temperatureLabel.text = nil
-        } else {
-            cell.temperatureLabel.text = String(cellModel.temperature)
-            cell.locationNameLabel.text = cellModel.name
-            cell.icon.setImageFromUrl(imageUrl: URL(string: cellModel.conditionIcon ?? "")!)
-            cell.windDirection.text = cellModel.windDirection
-            cell.windSpeed.text = String(cellModel.windSpeed)
-        }
-        return cell
-    }
-}
-
-class InitialControllerViewModel: NSObject, TableViewModel {
+class InitialControllerViewModel: NSObject, TableViewModelProtocol {
     var receivedResult = [SearchCellModel]() {
         didSet {
             isEmpty(receivedResult.isEmpty)
@@ -50,13 +17,7 @@ class InitialControllerViewModel: NSObject, TableViewModel {
     var localStorageService = LocalStorageService.shared
     var reloadTable: (() -> Void)
     var enableEditButton: ((Bool) -> Void)
-    var isEmpty: (Bool) -> Void
-    var needToUpdateLocalStorage = false
-    var isEditMode: Bool {
-        didSet {
-            
-        }
-    }
+    var isEmpty: (Bool) -> Void//for showing hint view
     
     init(enableEditButton: @escaping ((Bool) -> Void),
          reloadTable: @escaping (() -> Void),
@@ -64,24 +25,20 @@ class InitialControllerViewModel: NSObject, TableViewModel {
         self.enableEditButton = enableEditButton
         self.reloadTable = reloadTable
         self.isEmpty = isEmpty
-        self.isEditMode = false
         super.init()
         localStorageService.delegateList.append(self)
         self.receivedResult = localStorageService.currentItemModels()
         enableEditButton(!self.receivedResult.isEmpty)
         isEmpty(self.receivedResult.isEmpty)
     }
-    
-    
-    
+
     func setupTableView(tableView: UITableView) {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "SearchCell", bundle: nil), forCellReuseIdentifier: "SearchCell")
         tableView.allowsMultipleSelectionDuringEditing = true
     }
-    
-    
+    //delete action in edit mode
     func deleteItems(tableView: UITableView) {
         guard let selectedRows = tableView.indexPathsForSelectedRows?.map({ $0.row }) else{
             return
@@ -99,7 +56,7 @@ class InitialControllerViewModel: NSObject, TableViewModel {
         tableView.deleteRows(at: tableView.indexPathsForSelectedRows!, with: .none)
         tableView.endUpdates()
     }
-    
+    //pull to refresh case
     func updateAllItems(completionBlock: @escaping () -> Void) {
         var locationsToUpdate = receivedResult.count
         var updatedLocations = [SearchCellModel]()
@@ -121,6 +78,7 @@ class InitialControllerViewModel: NSObject, TableViewModel {
 }
 
 extension InitialControllerViewModel: LocalStorageServiceDelegate {
+    //recieveing data from local storage
     func favouriteLocationsDidUpdate(newLocations: [LocationInfo]) {
         receivedResult = [SearchCellModel]()
         for location in newLocations {
@@ -136,30 +94,24 @@ extension InitialControllerViewModel: UITableViewDataSource {
         return receivedResult.count
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return self.cellHeight()
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as? SearchCell,
             receivedResult.count > indexPath.row else {
                 return UITableViewCell()
         }
         let cellModel = receivedResult[indexPath.row]
-        cell.temperatureLabel.text = String(cellModel.temperature)
-        cell.locationNameLabel.text = cellModel.name
-        cell.icon.setImageFromUrl(imageUrl: URL(string: cellModel.conditionIcon ?? "")!)
-        cell.windDirection.text = cellModel.windDirection
-        cell.windSpeed.text = String(cellModel.windSpeed)
         
-        return cell
+        return self.configCell(cell: cell, cellModel: cellModel)
     }
 }
 
 
 extension InitialControllerViewModel: UITableViewDelegate {
     
-
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return self.cellHeight()
+    }
+    //table view swipe to delete feature
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .destructive, title: "Delete") { [weak self] (action, indexPath) in
             guard let deletingObject = self?.receivedResult[indexPath.row] else {
@@ -172,13 +124,12 @@ extension InitialControllerViewModel: UITableViewDelegate {
 
         return [delete]
     }
-    
+    //table view edit mode move feature
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        needToUpdateLocalStorage = true
         let movedObject = self.receivedResult[sourceIndexPath.row]
         receivedResult.remove(at: sourceIndexPath.row)
         receivedResult.insert(movedObject, at: destinationIndexPath.row)

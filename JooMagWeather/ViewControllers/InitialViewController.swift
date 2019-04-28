@@ -29,7 +29,9 @@ class InitialViewController: UIViewController {
             }
             
         }
-        var model = InitialControllerViewModel(enableEditButton: enableEditButton, reloadTable: reloadTable, isEmpty: isEmpty)
+        var model = InitialControllerViewModel(enableEditButton: enableEditButton,
+                                               reloadTable: reloadTable,
+                                               isEmpty: isEmpty)
         model.setupTableView(tableView: tableView)
         
         return model
@@ -49,7 +51,6 @@ class InitialViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -59,7 +60,6 @@ class InitialViewController: UIViewController {
     }
     
     @IBAction func editAction(_ sender: Any) {
-        viewModel.isEditMode = !viewModel.isEditMode
         shouldShowDeleteButton(hide: tableView.isEditing)
         tableView.setEditing(!tableView.isEditing, animated: false)
     }
@@ -86,7 +86,5 @@ class InitialViewController: UIViewController {
     }
     
     @IBAction func unwindToMainiewController(segue:UIStoryboardSegue) { }
-    
-    
 }
 

@@ -22,47 +22,6 @@ class LocalStorageService: NSObject {
     var workingContext: NSManagedObjectContext
     var fetchResultController: NSFetchedResultsController<LocationInfo>
     
-    func addNewFavouriteLocation(cellModel: SearchCellModel) {
-        let currentNames = self.currentItems().map{ $0.name }
-        guard !currentNames.contains(cellModel.name) else {
-            return
-        }
-        
-        let newModel = LocationInfo(context: workingContext)
-        newModel.name = cellModel.name
-        newModel.temperature = cellModel.temperature
-        newModel.conditionText = cellModel.conditionText
-        newModel.conditionIcon = cellModel.conditionIcon
-        newModel.windSpeed = cellModel.windSpeed
-        newModel.windDirection = cellModel.windDirection
-        newModel.idx = Int16(currentItems().count)
-        newModel.query = cellModel.query
-
-        try? workingContext.save()
-    }
-    func removeFavouriteLocations(locations: [LocationInfo]) {
-        for location in locations {
-            workingContext.delete(location)
-        }
-        try? workingContext.save()
-    }
-    
-    func removeFavouriteLocations(cellModels: [SearchCellModel]) {
-        for currentModel in cellModels {
-            if let strongLocation = currentModel.storedLocation {
-                workingContext.delete(strongLocation)
-            }
-        }
-        try? workingContext.save()
-    }
-    
-    func rearrangeWithFollowingOrder(cellModels: [SearchCellModel]) {
-        for cellModel in cellModels.enumerated() {
-            cellModel.element.storedLocation?.setValue(Int16(cellModels.count - 1 - cellModel.offset), forKey: "idx")
-        }
-        try? workingContext.save()
-    }
-    
     override init() {
         persistentContainer = NSPersistentContainer(name: "JooMagWeather")
         persistentContainer.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -85,11 +44,49 @@ class LocalStorageService: NSObject {
         try? fetchResultController.performFetch()
     }
     
+    func addNewFavouriteLocation(cellModel: SearchCellModel) {
+        let currentNames = self.currentItems().map{ $0.name }
+        //Skiping item if it is already in local storage
+        guard !currentNames.contains(cellModel.name) else {
+            return
+        }
+        
+        let newModel = LocationInfo(context: workingContext)
+        newModel.name = cellModel.name
+        newModel.temperature = cellModel.temperature
+        newModel.conditionText = cellModel.conditionText
+        newModel.conditionIcon = cellModel.conditionIcon
+        newModel.windSpeed = cellModel.windSpeed
+        newModel.windDirection = cellModel.windDirection
+        newModel.idx = Int16(currentItems().count)
+        newModel.query = cellModel.query
+
+        try? workingContext.save()
+    }
+    
+    func removeFavouriteLocations(locations: [LocationInfo]) {
+        var itemsAfterUpdate = currentItems()
+        let sortedLocations = locations.sorted(by: { $0.idx > $1.idx })
+        for location in sortedLocations {
+            itemsAfterUpdate.remove(at: Int(location.idx - 1))
+            workingContext.delete(location)
+        }
+        //after deleting swtting up right indexing
+        for item in itemsAfterUpdate.enumerated() {
+            item.element.setValue(itemsAfterUpdate.count - item.offset, forKey: "idx")
+        }
+        try? workingContext.save()
+    }
+    
+    func removeFavouriteLocations(cellModels: [SearchCellModel]) {
+        let locationList = cellModels.compactMap { $0.storedLocation }
+        removeFavouriteLocations(locations: locationList)
+    }
+    
     func currentItems() -> [LocationInfo] {
         guard let currentLocations = fetchResultController.fetchedObjects else {
             return [LocationInfo]()
         }
-        
         return currentLocations
     }
     
@@ -102,6 +99,15 @@ class LocalStorageService: NSObject {
         return modelList
     }
     
+    //for updating local storage in case of movements
+    func rearrangeWithFollowingOrder(cellModels: [SearchCellModel]) {
+        for cellModel in cellModels.enumerated() {
+            let itemIndex = Int16(cellModels.count - cellModel.offset)
+            cellModel.element.storedLocation?.setValue(itemIndex, forKey: "idx")
+        }
+        try? workingContext.save()
+    }
+    //for pull to refresh feature
     func updateWeatherInfo(newModels: [SearchCellModel]) {
         let oldItems = currentItems()
         let namesForIdentifing = newModels.map { $0.name }
@@ -121,7 +127,6 @@ class LocalStorageService: NSObject {
     }
 
 }
-
 
 extension LocalStorageService: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

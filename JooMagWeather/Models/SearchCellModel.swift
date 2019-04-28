@@ -28,13 +28,14 @@ extension SearchCellModel {
          windSpeed: Int16?,
          windDirection: String?,
          query: String?) {
-        self.name = name
-        self.temperature = temperature ?? 0
-        self.conditionIcon = conditionIcon
-        self.conditionText = conditionText
-        self.windSpeed = windSpeed ?? 0
-        self.windDirection = windDirection
-        self.query = query
+        self.init(name: name,
+                  temperature: temperature ?? 0,
+                  conditionIcon: conditionIcon,
+                  conditionText: conditionText,
+                  windSpeed: windSpeed ?? 0,
+                  windDirection: windDirection,
+                  query: query,
+                  storedLocation: nil)
     }
     
     init(location: LocationInfo) {
@@ -51,12 +52,6 @@ extension SearchCellModel {
 
 extension SearchCellModel: Equatable {
     public static func == (lhs: SearchCellModel, rhs: SearchCellModel) -> Bool {
-        return lhs.name == rhs.name &&
-                lhs.temperature == rhs.temperature &&
-                lhs.conditionIcon == rhs.conditionIcon &&
-                lhs.conditionText == rhs.conditionText &&
-                lhs.windSpeed == rhs.windSpeed &&
-                lhs.windDirection == rhs.windDirection &&
-                lhs.query == rhs.query
+        return lhs.name == rhs.name
     }
 }

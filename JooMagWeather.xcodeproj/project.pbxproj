@@ -22,6 +22,7 @@
 		8BBCE32022760F4B00B58BEC /* LocalStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBCE31E22760F4B00B58BEC /* LocalStorageService.swift */; };
 		8BBCE32122760F4B00B58BEC /* LocationSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBCE31F22760F4B00B58BEC /* LocationSearchService.swift */; };
 		8BBCE3232276105400B58BEC /* UIImageView+Additionas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBCE3222276105400B58BEC /* UIImageView+Additionas.swift */; };
+		8BBCE3252276410C00B58BEC /* TableViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBCE3242276410C00B58BEC /* TableViewModelProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		8BBCE31E22760F4B00B58BEC /* LocalStorageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorageService.swift; sourceTree = "<group>"; };
 		8BBCE31F22760F4B00B58BEC /* LocationSearchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationSearchService.swift; sourceTree = "<group>"; };
 		8BBCE3222276105400B58BEC /* UIImageView+Additionas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+Additionas.swift"; sourceTree = "<group>"; };
+		8BBCE3242276410C00B58BEC /* TableViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewModelProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +123,7 @@
 			children = (
 				8BBCE31922760F3F00B58BEC /* SearchViewModel.swift */,
 				8BBCE31A22760F3F00B58BEC /* InitialControllerViewModel.swift */,
+				8BBCE3242276410C00B58BEC /* TableViewModelProtocol.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 				8BBCE31C22760F3F00B58BEC /* InitialControllerViewModel.swift in Sources */,
 				8BBCE32122760F4B00B58BEC /* LocationSearchService.swift in Sources */,
 				8BBCE3232276105400B58BEC /* UIImageView+Additionas.swift in Sources */,
+				8BBCE3252276410C00B58BEC /* TableViewModelProtocol.swift in Sources */,
 				8BBCE31622760F2700B58BEC /* SearchCell.swift in Sources */,
 				8BBCE2F922760CA900B58BEC /* JooMagWeather.xcdatamodeld in Sources */,
 				8BBCE30622760D6900B58BEC /* SearchViewController.swift in Sources */,
