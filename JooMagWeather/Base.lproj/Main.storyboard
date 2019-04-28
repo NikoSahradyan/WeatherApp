@@ -32,7 +32,7 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Currenlty you dont have favourite locations, please start searching and adding them, good luck!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Vc-RQ-eI0">
-                                        <rect key="frame" x="8" y="430" width="359" height="36"/>
+                                        <rect key="frame" x="28.5" y="438" width="318.5" height="54"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -43,9 +43,9 @@
                                     <constraint firstItem="1Vc-RQ-eI0" firstAttribute="centerX" secondItem="Zfn-3h-uTX" secondAttribute="centerX" id="Ezl-ij-pIc"/>
                                     <constraint firstItem="Zfn-3h-uTX" firstAttribute="centerX" secondItem="dQh-Th-6WM" secondAttribute="centerX" id="bMR-rS-0D9"/>
                                     <constraint firstItem="Zfn-3h-uTX" firstAttribute="centerY" secondItem="dQh-Th-6WM" secondAttribute="centerY" id="bv6-by-QSb"/>
-                                    <constraint firstItem="1Vc-RQ-eI0" firstAttribute="leading" secondItem="dQh-Th-6WM" secondAttribute="leading" constant="8" id="mYS-hX-gKa"/>
-                                    <constraint firstAttribute="trailing" secondItem="1Vc-RQ-eI0" secondAttribute="trailing" constant="8" id="nfD-K9-Zd5"/>
-                                    <constraint firstItem="1Vc-RQ-eI0" firstAttribute="top" secondItem="Zfn-3h-uTX" secondAttribute="bottom" constant="16" id="qhP-43-4Fy"/>
+                                    <constraint firstItem="1Vc-RQ-eI0" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="dQh-Th-6WM" secondAttribute="leading" constant="16" id="mYS-hX-gKa"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1Vc-RQ-eI0" secondAttribute="trailing" constant="16" id="nfD-K9-Zd5"/>
+                                    <constraint firstItem="1Vc-RQ-eI0" firstAttribute="top" secondItem="Zfn-3h-uTX" secondAttribute="bottom" constant="24" id="qhP-43-4Fy"/>
                                 </constraints>
                             </view>
                         </subviews>
