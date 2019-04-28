@@ -8,10 +8,16 @@
 
 import UIKit
 
+enum SearchRequestingStrategy {
+    case single
+    case multiple
+}
+
 class LocationSearchService: NSObject {
     static var shared = LocationSearchService()
+    var previousDataTask: URLSessionDataTask?
     
-    func searchWithQuery(query: String, completionClosure: @escaping (SearchCellModel) -> Void) {
+    func searchWithQuery(query: String, requestStrategy: SearchRequestingStrategy = .single, completionClosure: @escaping (SearchCellModel) -> Void) {
         let url = "http://api.apixu.com/v1" + "/current.json?" + "key=cfd41348829e47f0af1190214192604" + "&q=" + query
         guard let finalUrl = URL(string: url) else {
             return
@@ -26,6 +32,10 @@ class LocationSearchService: NSObject {
             } else {
                 completionClosure(SearchCellModel.empty)
             }
+        }
+        if requestStrategy == .single {
+            previousDataTask?.cancel()
+            previousDataTask = currentTask
         }
         currentTask.resume()
     }

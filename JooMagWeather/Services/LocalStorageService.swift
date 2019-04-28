@@ -35,6 +35,7 @@ class LocalStorageService: NSObject {
 
         try? workingContext.save()
     }
+
     func removeFavouriteLocations(locations: [LocationInfo]) {
         for location in locations {
             workingContext.delete(location)

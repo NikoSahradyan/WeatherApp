@@ -29,6 +29,7 @@ extension TableViewModel {
         if cellModel == SearchCellModel.empty {
             cell.locationNameLabel.text = cellModel.name
             cell.windInfoStack.isHidden = true
+            cell.temperatureLabel.text = nil
         } else {
             cell.temperatureLabel.text = String(cellModel.temperature)
             cell.locationNameLabel.text = cellModel.name
@@ -104,7 +105,7 @@ class InitialControllerViewModel: NSObject, TableViewModel {
         var updatedLocations = [SearchCellModel]()
         for location in receivedResult {
             if let query = location.query {
-                LocationSearchService.shared.searchWithQuery(query: query) { cellModel in
+                LocationSearchService.shared.searchWithQuery(query: query, requestStrategy: .multiple) { cellModel in
                     updatedLocations.append(cellModel)
                     locationsToUpdate -= 1
                     if locationsToUpdate == 0 {

@@ -32,10 +32,8 @@ class SearchViewModel: NSObject, TableViewModel {
         DispatchQueue.global(qos: .background).asyncAfter(deadline: DispatchTime.now() + 1) {
             if self.currentQuery == searchText {
                 LocationSearchService.shared.searchWithQuery(query: searchText) { cellModel in
-                    if self.currentQuery == searchText {
-                        self.receivedResult = [cellModel]
-                        self.reloadTable()
-                    }
+                    self.receivedResult = [cellModel]
+                    self.reloadTable()
                 }
             }
         }
